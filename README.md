@@ -1,6 +1,6 @@
 # hackathon-project
 36 hour-online hackathon project 
-# CarbonTrack 🌱
+# Ecotrack AI 🌱
 
 ## Project Overview
 CarbonTrack is a simple web-based prototype that helps users estimate their carbon footprint based on daily expenses.
