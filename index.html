@@ -1,109 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoTrack AI | Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>CarbonTrack</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-900 text-white font-sans">
+<body>
 
-    <nav class="p-6 border-b border-slate-800 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-emerald-400">EcoTrack AI</h1>
-        <div class="text-sm bg-emerald-900/30 px-4 py-2 rounded-full border border-emerald-500/50">
-            Vision: Personal Net-Zero [cite: 59]
+    <div class="container">
+        <h1>CarbonTrack 🌱</h1>
+        <p>Track your carbon footprint from daily expenses</p>
+
+        <div class="form">
+            <label>Amount Spent (₹)</label><br>
+            <input type="number" id="amount" placeholder="Enter amount"><br><br>
+
+            <label>Category</label><br>
+            <select id="category">
+                <option value="food">Food</option>
+                <option value="travel">Travel</option>
+                <option value="shopping">Shopping</option>
+            </select><br><br>
+
+            <button onclick="calculate()">Calculate Footprint</button>
         </div>
-    </nav>
 
-    <main class="max-w-6xl mx-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        <section class="bg-slate-800 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-xl mb-4 font-semibold">New Transaction</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm opacity-70">Category [cite: 15]</label>
-                    <select id="category" class="w-full bg-slate-700 p-3 rounded-lg mt-1 border border-slate-600">
-                        <option value="Food">Food & Dining</option>
-                        <option value="Travel">Travel & Transport</option>
-                        <option value="Utilities">Monthly Utilities</option>
-                        <option value="Shopping">General Shopping</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm opacity-70">Amount ($)</label>
-                    <input type="number" id="amount" class="w-full bg-slate-700 p-3 rounded-lg mt-1 border border-slate-600" placeholder="0.00">
-                </div>
-                <button onclick="processTransaction()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg transition-all">
-                    Track Carbon Impact [cite: 49]
-                </button>
-            </div>
+        <div class="result" id="result">
+            <!-- Result will appear here -->
+        </div>
+    </div>
 
-            <div class="mt-8 p-4 bg-blue-900/20 border border-blue-500/30 rounded-xl">
-                <h3 class="text-blue-400 font-bold text-sm uppercase">Smart Alternative:</h3>
-                <p id="suggestion" class="text-sm mt-1">Enter a transaction to see lower-impact alternatives.</p>
-            </div>
-        </section>
-
-        <section class="bg-slate-800 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-xl mb-4 font-semibold">CO2 Output Analysis</h2>
-            <canvas id="impactChart" class="max-h-64"></canvas>
-            <div id="metrics" class="mt-6 text-center text-emerald-400 font-medium italic"></div>
-        </section>
-
-    </main>
-
-    <script>
-        // Initializing Chart.js 
-        const ctx = document.getElementById('impactChart').getContext('2d');
-        const impactChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Food', 'Travel', 'Utilities', 'Shopping'],
-                datasets: [{
-                    data: [0, 0, 0, 0],
-                    backgroundColor: ['#34d399', '#60a5fa', '#fbbf24', '#f87171'],
-                    borderWidth: 0
-                }]
-            },
-            options: { plugins: { legend: { labels: { color: 'white' } } } }
-        });
-
-        async function processTransaction() {
-            const category = document.getElementById('category').value;
-            const amount = document.getElementById('amount').value;
-
-            // Connecting to C++ Backend [cite: 37, 52]
-            try {
-                const response = await fetch('http://localhost:18080/api/calculate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category, amount: parseFloat(amount) })
-                });
-                
-                const data = await response.json();
-
-                // Update UI with Relatable Metrics [cite: 53]
-                document.getElementById('metrics').innerText = data.relatable_metric;
-                
-                // Update Visualization [cite: 47]
-                const catIndex = impactChart.data.labels.indexOf(category);
-                impactChart.data.datasets[0].data[catIndex] += data.co2;
-                impactChart.update();
-
-                // Smart Suggestion Logic [cite: 16, 27]
-                const suggestions = {
-                    "Food": "Try a plant-based meal today to reduce this by 40%.",
-                    "Travel": "Consider public transit to lower your footprint.",
-                    "Shopping": "Check local thrift stores for carbon-neutral options."
-                };
-                document.getElementById('suggestion').innerText = suggestions[category] || "Great job tracking!";
-
-            } catch (err) {
-                console.error("Backend connection required: ", err);
-                alert("Please ensure the C++ Backend is running on port 18080");
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+
